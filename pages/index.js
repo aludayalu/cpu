@@ -190,7 +190,24 @@ export default function Home() {
                         setCPUData(cpu_data-memory[operations[ip][1]])
                     }
                     if (operations[ip][0]=="JUMP") {
-                        setIp(operations[ip][1])
+                        if (cpu_data!=0) {
+                            setIp(operations[ip][1])
+                            if (operations[operations[ip][1]]===undefined) {
+                                setSimulate(false)
+                                setIp(0)
+                                setOperations(["",""])
+                                setCPUData(0)
+                            }
+                            return
+                        }
+                        return
+                    }
+                    if (operations[ip][0]=="GREATER") {
+                        if (cpu_data>memory[operations[ip][1]]) {
+                            setCPUData(1)
+                        } else {
+                            setCPUData(0)
+                        }
                     }
                     if (operations[ip][0]=="MULTIPLY") {
                         setCPUData(cpu_data*memory[operations[ip][1]])
