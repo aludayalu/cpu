@@ -46,7 +46,7 @@ export default function Home() {
             <div style={{padding:"5vw"}} className="wrapper">
                 <Card css={{width:"20vw", height:"55vh"}} variant="bordered">
                     <Text h2 className="vertical">Instructions</Text>
-                    <Textarea disabled={simulate} css={{border:"1px solid rgba(255, 255, 255, 0.15)", margin:"1vw"}} value={code} rows={20} animated={false} onChange={(x)=>{
+                    <Textarea css={{border:"1px solid rgba(255, 255, 255, 0.15)", margin:"1vw"}} value={code} rows={20} animated={false} onChange={(x)=>{
                         var code=x.target.value
                         var new_code=""
                         code.split("\n").forEach((x)=>{
@@ -68,7 +68,7 @@ export default function Home() {
                 <Spacer></Spacer>
                 <Card css={{width:"20vw", height:"55vh"}} variant="bordered">
                     <Text h2 className="vertical">Data</Text>
-                    <Textarea disabled={simulate} css={{border:"1px solid rgba(255, 255, 255, 0.15)", margin:"1vw"}} value={data} rows={20} animated={false} onChange={(x)=>{
+                    <Textarea css={{border:"1px solid rgba(255, 255, 255, 0.15)", margin:"1vw"}} value={data} rows={20} animated={false} onChange={(x)=>{
                         var code=x.target.value
                         var new_code=""
                         code.split("\n").forEach((x)=>{
