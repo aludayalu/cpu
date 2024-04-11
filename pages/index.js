@@ -209,6 +209,20 @@ export default function Home() {
                             setCPUData(0)
                         }
                     }
+                    if (operations[ip][0]=="LESSER") {
+                        if (cpu_data<memory[operations[ip][1]]) {
+                            setCPUData(1)
+                        } else {
+                            setCPUData(0)
+                        }
+                    }
+                    if (operations[ip][0]=="EQUAL") {
+                        if (cpu_data===memory[operations[ip][1]]) {
+                            setCPUData(1)
+                        } else {
+                            setCPUData(0)
+                        }
+                    }
                     if (operations[ip][0]=="MULTIPLY") {
                         setCPUData(cpu_data*memory[operations[ip][1]])
                     }
