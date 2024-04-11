@@ -35,6 +35,84 @@ export default function Home() {
     } else {
         data="0: "
     }
+    function Execute() {
+        if (operations[ip]===undefined) {
+            setSimulate(false)
+            setIp(0)
+            setOperations(["",""])
+            setCPUData(0)
+            return
+        }
+        if (simulate!=true) {
+            return
+        }
+        if (operations[ip][0]=="LOAD") {
+            setCPUData(memory[operations[ip][1]])
+        }
+        if (operations[ip][0]=="PRINT") {
+            setLog(log+String(cpu_data)+"\n")
+            setTimeout(()=>{
+                document.getElementById("log-output").scrollTop=document.getElementById("log-output").scrollHeight;
+            })
+        }
+        if (operations[ip][0]=="ADD") {
+            setCPUData(cpu_data+memory[operations[ip][1]])
+        }
+        if (operations[ip][0]=="SUB") {
+            setCPUData(cpu_data-memory[operations[ip][1]])
+        }
+        if (operations[ip][0]=="JUMP") {
+            if (cpu_data!=0) {
+                setIp(operations[ip][1])
+                if (operations[operations[ip][1]]===undefined) {
+                    setSimulate(false)
+                    setIp(0)
+                    setOperations(["",""])
+                    setCPUData(0)
+                }
+                return
+            } else {
+                setIp(ip+1)
+            }
+        }
+        if (operations[ip][0]=="GREATER") {
+            if (cpu_data>memory[operations[ip][1]]) {
+                setCPUData(1)
+            } else {
+                setCPUData(0)
+            }
+        }
+        if (operations[ip][0]=="LESSER") {
+            if (cpu_data<memory[operations[ip][1]]) {
+                setCPUData(1)
+            } else {
+                setCPUData(0)
+            }
+        }
+        if (operations[ip][0]=="EQUAL") {
+            if (cpu_data===memory[operations[ip][1]]) {
+                setCPUData(1)
+            } else {
+                setCPUData(0)
+            }
+        }
+        if (operations[ip][0]=="MULTIPLY") {
+            setCPUData(cpu_data*memory[operations[ip][1]])
+        }
+        if (operations[ip][0]=="STORE") {
+            memory[operations[ip][1]]=cpu_data
+            setMemory(memory)
+        }
+        if (operations[ip+1]===undefined) {
+            setSimulate(false)
+            return
+        } else {
+            setIp(ip+1)
+        }
+    }
+    try {
+        window.localStorage.setItem("simulate", simulate ? "true" : "false")
+    } catch {}
     return (
         <>
             <Head>
@@ -100,14 +178,14 @@ export default function Home() {
                     <Text h2 className="vertical">CPU</Text>
                     <div className="wrapper">
                         <Card variant="bordered" css={{margin:"1vw", p:"$5"}}>
-                            <Text h2 color="success">IP: <span style={{color:"white"}}>{ip}</span></Text>
-                            <Text h2 color="success">DATA: <span style={{color:"white"}}>{cpu_data}</span></Text>
-                            <Text h2 color="success">OPERATION: <span style={{color:"white"}}>{operations[ip][0]}</span></Text>
-                            <Text h2 color="success">OPERAND: <span style={{color:"white"}}>{operations[ip][1]}</span></Text>
+                            <Text h4 color="success">IP: <span style={{color:"white"}}>{ip}</span></Text>
+                            <Text h4 color="success">DATA: <span style={{color:"white"}}>{cpu_data}</span></Text>
+                            <Text h4 color="success">OPERATION: <span style={{color:"white"}}>{operations[ip][0]}</span></Text>
+                            <Text h4 color="success">OPERAND: <span style={{color:"white"}}>{operations[ip][1]}</span></Text>
                         </Card>
                     </div>
                     <div className="wrapper">
-                        <Card variant="bordered" css={{margin:"1vw", p:"$5", height:"12vh", overflowY:"auto"}}>
+                        <Card variant="bordered" css={{margin:"1vw", p:"$5", height:"20vh", overflowY:"auto"}} id="log-output">
                             {log.split("\n").map((x)=>{
                                 return <Text>{x}</Text>
                             })}
@@ -118,7 +196,7 @@ export default function Home() {
                 <Card css={{width:"20vw", height:"55vh"}} variant="bordered">
                     <Text h2 className="vertical">MEMORY</Text>
                     <div className="wrapper" style={{height:"80%"}}>
-                        <Card variant="bordered" css={{margin:"1vw", p:"$5", height:"100%"}}>
+                        <Card variant="bordered" css={{margin:"1vw", p:"$5", height:"100%", overflowY:"auto"}}>
                             {memory.map((x, i)=>{
                                 return (
                                     <Text h4>{i}: {x}</Text>
@@ -166,77 +244,8 @@ export default function Home() {
                 }}
                 >Compile</Button>
                 <Spacer></Spacer>
-                <Button disabled={!simulate} onClick={()=>{
-                    if (operations[ip]===undefined) {
-                        setSimulate(false)
-                        setIp(0)
-                        setOperations(["",""])
-                        setCPUData(0)
-                        return
-                    }
-                    if (simulate!=true) {
-                        return
-                    }
-                    if (operations[ip][0]=="LOAD") {
-                        setCPUData(memory[operations[ip][1]])
-                    }
-                    if (operations[ip][0]=="PRINT") {
-                        setLog(log+String(cpu_data)+"\n")
-                    }
-                    if (operations[ip][0]=="ADD") {
-                        setCPUData(cpu_data+memory[operations[ip][1]])
-                    }
-                    if (operations[ip][0]=="SUB") {
-                        setCPUData(cpu_data-memory[operations[ip][1]])
-                    }
-                    if (operations[ip][0]=="JUMP") {
-                        if (cpu_data!=0) {
-                            setIp(operations[ip][1])
-                            if (operations[operations[ip][1]]===undefined) {
-                                setSimulate(false)
-                                setIp(0)
-                                setOperations(["",""])
-                                setCPUData(0)
-                            }
-                            return
-                        } else {
-                            setIp(ip+1)
-                        }
-                    }
-                    if (operations[ip][0]=="GREATER") {
-                        if (cpu_data>memory[operations[ip][1]]) {
-                            setCPUData(1)
-                        } else {
-                            setCPUData(0)
-                        }
-                    }
-                    if (operations[ip][0]=="LESSER") {
-                        if (cpu_data<memory[operations[ip][1]]) {
-                            setCPUData(1)
-                        } else {
-                            setCPUData(0)
-                        }
-                    }
-                    if (operations[ip][0]=="EQUAL") {
-                        if (cpu_data===memory[operations[ip][1]]) {
-                            setCPUData(1)
-                        } else {
-                            setCPUData(0)
-                        }
-                    }
-                    if (operations[ip][0]=="MULTIPLY") {
-                        setCPUData(cpu_data*memory[operations[ip][1]])
-                    }
-                    if (operations[ip][0]=="STORE") {
-                        memory[operations[ip][1]]=cpu_data
-                        setMemory(memory)
-                    }
-                    if (operations[ip+1]===undefined) {
-                        setSimulate(false)
-                        return
-                    } else {
-                        setIp(ip+1)
-                    }
+                <Button id="next" disabled={!simulate} onClick={()=>{
+                    Execute()
                 }}>Execute Instruction</Button>
                 <Spacer></Spacer>
                 <Button disabled={!simulate} onClick={()=>{
@@ -245,6 +254,17 @@ export default function Home() {
                     setOperations(["",""])
                     setCPUData(0)
                 }}>Reset</Button>
+                <Spacer></Spacer>
+                <Button disabled={!simulate} onClick={()=>{
+                    setTimeout(async ()=>{
+                        for (var i=0; i<100; i++) {
+                            if (window.localStorage.getItem("simulate")==="true") {
+                                document.getElementById("next").click()
+                                await new Promise(r => setTimeout(r, 100))
+                            }
+                        }
+                    })
+                }}>Full Execution</Button>
             </div>
         </> 
     )
