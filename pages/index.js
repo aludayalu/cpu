@@ -199,8 +199,9 @@ export default function Home() {
                                 setCPUData(0)
                             }
                             return
+                        } else {
+                            setIp(ip+1)
                         }
-                        return
                     }
                     if (operations[ip][0]=="GREATER") {
                         if (cpu_data>memory[operations[ip][1]]) {
