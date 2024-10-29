@@ -58,6 +58,9 @@ export default function Home() {
         if (operations[ip][0]=="ADD") {
             setCPUData(cpu_data+memory[operations[ip][1]])
         }
+        if (operations[ip][0]=="MOD") {
+            setCPUData(cpu_data % memory[operations[ip][1]])
+        }
         if (operations[ip][0]=="SUB") {
             setCPUData(cpu_data-memory[operations[ip][1]])
         }
