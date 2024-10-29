@@ -64,6 +64,9 @@ export default function Home() {
         if (operations[ip][0]=="SUB") {
             setCPUData(cpu_data-memory[operations[ip][1]])
         }
+        if (operations[ip][0]=="DIVIDE") {
+            setCPUData(cpu_data / memory[operations[ip][1]])
+        }
         if (operations[ip][0]=="JUMP") {
             if (cpu_data!=0) {
                 setIp(operations[ip][1])
